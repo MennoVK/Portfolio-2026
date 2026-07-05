@@ -1,0 +1,21 @@
+{
+    "explorer.compactFolders": false,
+    "editor.tabSize": 4,
+    "editor.formatOnSave": true,
+    "editor.detectIndentation": false,
+    "editor.codeActionsOnSave": ["source.addMissingImports", "source.organizeImports", "source.fixAll.eslint"],
+    "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": false,
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "eslint.workingDirectories": [
+        {
+            "mode": "auto"
+        }
+    ],
+    "files.associations": {
+        "*.css": "tailwindcss"
+    },
+    "indentRainbow.ignoreErrorLanguages": ["typescript", "typescriptreact"]
+}
