@@ -110,7 +110,7 @@ export const LetterGrid = () => {
 
     return (
         <>
-            <div className='select-none [&>div]:text-center flex flex-col justify-evenly h-svh' aria-hidden='true'>
+            <div className='select-none [&>div]:text-center flex flex-col justify-evenly h-svh overflow-hidden' aria-hidden='true'>
                 {grid.map((row, rowIndex) => (
                     <div key={rowIndex} className='flex justify-between'>
                         {row.map((cell, cellIndex) => {
