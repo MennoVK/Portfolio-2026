@@ -10,6 +10,7 @@ const projects = [
     {title: "LARASARI", link: "https://larasari.com"},
     {title: "LOUWMANMUSEUM", link: "https://louwmanmuseum.nl"},
 ];
+const label = "WORK";
 const email = "CONTACT@MENNOVEERKAMP.COM";
 const projectColors = ["text-green", "text-red", "text-cyan", "text-pink", "text-yellow"];
 
@@ -30,6 +31,11 @@ const buildGrid = () => {
     const isMobile = window.innerWidth < 640;
     const emailLabel = isMobile ? "CONTACT" : email;
     const emailStart = Math.floor(width / 2) - Math.floor(emailLabel.length / 2);
+    const labelStart = Math.floor(width / 2) - Math.floor(label.length / 2);
+
+    for (let index = 0; index < label.length; index++) {
+        rows[0][labelStart + index] = {text: label[index], isInfo: true};
+    }
 
     for (let index = 0; index < emailLabel.length; index++) {
         rows[height - 1][emailStart + index] = {text: emailLabel[index], href: `mailto:${email.toLowerCase()}`, isInfo: true};
@@ -116,10 +122,14 @@ export const LetterGrid = () => {
                                     tabIndex={-1}
                                     onMouseEnter={() => setHoveredLinkId(cell.linkId ?? cell.href ?? null)}
                                     onMouseLeave={() => setHoveredLinkId((current) => (current === (cell.linkId ?? cell.href ?? null) ? null : current))}
-                                    className={clsx("w-full", hoveredLinkId === (cell.linkId ?? cell.href ?? null) ? "underline" : "no-underline", cell.isInfo ? "opacity-80" : (cell.colorClass ?? "text-green"))}
+                                    className={clsx("w-full", hoveredLinkId === (cell.linkId ?? cell.href ?? null) && "md:underline", cell.isInfo ? "opacity-80" : cell.colorClass)}
                                 >
                                     {cell.text}
                                 </Link>
+                            ) : cell.isInfo ? (
+                                <span key={`${rowIndex}-${cellIndex}`} className='w-full opacity-80'>
+                                    {cell.text}
+                                </span>
                             ) : (
                                 <RollingLetter key={`${rowIndex}-${cellIndex}`} className='w-full'>
                                     {cell.text}

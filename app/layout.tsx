@@ -32,8 +32,8 @@ export default function RootLayout({
     return (
         <html lang='en' className={`${MicroGrotesk.className} antialiased`}>
             <body className='h-screen w-screen px-5 py-3 bg-black text-white font-bold'>
-                <Link href='/' className='bg-black absolute top-5 left-1/2 -translate-x-1/2 z-50'>
-                    <Image src='/logo.svg' alt='Logo' width={215} height={175} loading='eager' fetchPriority='high' className='px-9 w-40 h-auto' />
+                <Link href='/' className='bg-black absolute top-5 left-9 w-45 z-10 aspect-square flex items-center justify-center'>
+                    <Image src='/logo.svg' alt='Logo' width={215} height={175} loading='eager' fetchPriority='high' className='px-9 w-50 h-auto' />
                 </Link>
                 <main className='h-full'>{children}</main>
                 <Analytics />
