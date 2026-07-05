@@ -1,3 +1,5 @@
+import {Analytics} from "@vercel/analytics/next";
+import {SpeedInsights} from "@vercel/speed-insights/next";
 import type {Metadata} from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -34,6 +36,8 @@ export default function RootLayout({
                     <Image src='/logo.svg' alt='Logo' width={215} height={175} loading='eager' fetchPriority='high' className='px-9 w-40 h-auto' />
                 </Link>
                 <main className='h-full'>{children}</main>
+                <Analytics />
+                <SpeedInsights />
             </body>
         </html>
     );
