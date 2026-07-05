@@ -51,7 +51,7 @@ const buildGrid = () => {
         let placement: {row: number; start: number} | null = null;
 
         for (let attempt = 0; attempt < maxAttempts; attempt++) {
-            const row = 1 + Math.floor(Math.random() * (height - 2));
+            const row = 2 + Math.floor(Math.random() * (height - 3));
             const start = Math.floor(Math.random() * (width - project.title.length + 1));
             const canFit = Array.from({length: project.title.length}, (_, letterIndex) => rows[row][start + letterIndex]).every((cell) => !cell.href);
 
