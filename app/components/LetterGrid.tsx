@@ -2,7 +2,7 @@
 
 import clsx from "clsx";
 import Link from "next/link";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {RollingLetter} from "./RollingLetter";
 
 const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#%&".split("");
@@ -74,6 +74,8 @@ const buildGrid = () => {
 export const LetterGrid = () => {
     const [grid, setGrid] = useState<Cell[][]>([]);
     const [hoveredLinkId, setHoveredLinkId] = useState<string | null>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
+    const lettersRef = useRef<HTMLSpanElement[]>([]);
 
     useEffect(() => {
         const update = () => setGrid(buildGrid());
@@ -85,13 +87,23 @@ export const LetterGrid = () => {
     }, []);
 
     useEffect(() => {
-        let timeout: number;
+        lettersRef.current = Array.from(containerRef.current?.querySelectorAll(".letter span") ?? []);
+    }, [grid]);
+
+    useEffect(() => {
+        const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        if (prefersReducedMotion) return;
+
+        let timeout: number | undefined;
 
         const loop = () => {
-            const els = document.querySelectorAll(".letter span");
+            const els = lettersRef.current;
 
             if (els.length) {
                 const el = els[Math.floor(Math.random() * els.length)];
+
+                if (!el) return;
 
                 el.classList.remove("animate-roll");
 
@@ -100,17 +112,19 @@ export const LetterGrid = () => {
                 });
             }
 
-            timeout = window.setTimeout(loop, 60 + Math.random() * 120);
+            timeout = window.setTimeout(loop, 140 + Math.random() * 220);
         };
 
         loop();
 
-        return () => window.clearTimeout(timeout);
-    }, []);
+        return () => {
+            if (timeout) window.clearTimeout(timeout);
+        };
+    }, [grid]);
 
     return (
         <>
-            <div className='select-none [&>div]:text-center flex flex-col justify-evenly h-svh overflow-hidden py-5 px-5' aria-hidden='true'>
+            <div ref={containerRef} className='select-none [&>div]:text-center flex flex-col justify-evenly h-svh overflow-hidden py-5 px-5' aria-hidden='true'>
                 {grid.map((row, rowIndex) => (
                     <div key={rowIndex} className='flex justify-between'>
                         {row.map((cell, cellIndex) => {
