@@ -9,6 +9,8 @@ const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#%&".split("");
 const projects = [
     {title: "LARASARI", link: "https://larasari.com"},
     {title: "LOUWMANMUSEUM", link: "https://louwmanmuseum.nl"},
+    {title: "GEORGIESCHRODER", link: "https://georgieschroder.com"},
+
 ];
 const label = "WORK";
 const email = "CONTACT@MENNOVEERKAMP.COM";
@@ -23,53 +25,101 @@ type Cell = {
 };
 
 const buildGrid = () => {
-    const width = Math.max(12, Math.floor(window.innerWidth / 25));
-    const height = Math.max(8, Math.floor(window.innerHeight / 25));
+    const width = Math.max(12, Math.floor(window.innerWidth / 21));
+    const height = Math.max(8, Math.floor(window.innerHeight / 21));
 
-    const rows: Cell[][] = Array.from({length: height}, () => Array.from({length: width}, (): Cell => ({text: letters[Math.floor(Math.random() * letters.length)]})));
+    const rows: Cell[][] = Array.from(
+        {length: height},
+        () =>
+            Array.from(
+                {length: width},
+                (): Cell => ({
+                    text: letters[Math.floor(Math.random() * letters.length)],
+                })
+            )
+    );
 
     const isMobile = window.innerWidth < 640;
+
     const emailLabel = isMobile ? "CONTACT" : email;
+
     const emailStart = Math.floor(width / 2) - Math.floor(emailLabel.length / 2);
     const labelStart = Math.floor(width / 2) - Math.floor(label.length / 2);
 
+    // Fixed header
     for (let index = 0; index < label.length; index++) {
-        rows[0][labelStart + index] = {text: label[index], isInfo: true};
+        rows[0][labelStart + index] = {
+            text: label[index],
+            isInfo: true,
+        };
     }
 
+    // Fixed footer
     for (let index = 0; index < emailLabel.length; index++) {
-        rows[height - 1][emailStart + index] = {text: emailLabel[index], href: `mailto:${email.toLowerCase()}`, isInfo: true};
+        const column = emailStart + index;
+
+        if (column < 0 || column >= width) continue;
+
+        rows[height - 1][column] = {
+            text: emailLabel[index],
+            href: `mailto:${email.toLowerCase()}`,
+            isInfo: true,
+        };
     }
 
-    const shuffledColors = [...projectColors].sort(() => Math.random() - 0.5);
+    const shuffledColors = [...projectColors].sort(
+        () => Math.random() - 0.5
+    );
 
-    projects.forEach((project, index) => {
-        if (project.title.length >= width) return;
+   const availableRows = Array.from(
+    {length: Math.max(0, height - 2)},
+    (_, index) => index + 1
+    ).sort(() => Math.random() - 0.5);
 
-        const colorClass = shuffledColors[index % shuffledColors.length];
-        const maxAttempts = 100;
-        let placement: {row: number; start: number} | null = null;
+    const shuffledProjects = [...projects].sort(() => Math.random() - 0.5);
 
-        for (let attempt = 0; attempt < maxAttempts; attempt++) {
-            const row = 2 + Math.floor(Math.random() * (height - 3));
-            const start = Math.floor(Math.random() * (width - project.title.length + 1));
-            const canFit = Array.from({length: project.title.length}, (_, letterIndex) => rows[row][start + letterIndex]).every((cell) => !cell.href);
+    shuffledProjects.forEach((project, index) => {
+        const titleLength = project.title.length;
 
-            if (canFit) {
-                placement = {row, start};
-                break;
-            }
+        // Not enough horizontal space
+        if (titleLength > width) {
+            console.warn(
+                `Project "${project.title}" doesn't fit: ${titleLength} chars > ${width} columns`
+            );
+            return;
         }
 
-        if (!placement) return;
+        // Not enough rows
+        const row = availableRows[index];
 
-        for (let letterIndex = 0; letterIndex < project.title.length; letterIndex++) {
-            rows[placement.row][placement.start + letterIndex] = {text: project.title[letterIndex], href: project.link, colorClass, linkId: project.link};
+        if (row === undefined) {
+            console.warn(
+                `Project "${project.title}" couldn't be placed: not enough rows`
+            );
+            return;
+        }
+
+        // Random horizontal position
+        const start = Math.floor(
+            Math.random() * (width - titleLength + 1)
+        );
+
+        const colorClass =
+            shuffledColors[index % shuffledColors.length];
+
+        for (let letterIndex = 0; letterIndex < titleLength; letterIndex++) {
+            rows[row][start + letterIndex] = {
+                text: project.title[letterIndex],
+                href: project.link,
+                colorClass,
+                linkId: project.link,
+            };
         }
     });
 
     return rows;
 };
+
 
 export const LetterGrid = () => {
     const [grid, setGrid] = useState<Cell[][]>([]);
