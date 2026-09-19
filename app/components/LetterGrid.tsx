@@ -2,8 +2,8 @@
 
 import clsx from "clsx";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
-import { RollingLetter } from "./RollingLetter";
+import {useEffect, useRef, useState} from "react";
+import {RollingLetter} from "./RollingLetter";
 
 const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#%&".split("");
 const projects = [
@@ -195,7 +195,7 @@ export const LetterGrid = () => {
     <>
       <div
         ref={containerRef}
-        className="select-none [&>div]:text-center flex flex-col justify-evenly h-svh overflow-hidden py-5 px-5"
+        className="select-none [&>div]:text-center flex flex-col justify-evenly h-full overflow-hidden py-5 px-5"
         aria-hidden="true"
       >
         {grid.map((row, rowIndex) => (
