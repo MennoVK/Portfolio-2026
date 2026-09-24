@@ -14,7 +14,7 @@ type Cell = {
 };
 
 const buildGrid = () => {
-    const width = Math.max(12, Math.floor(window.innerWidth / 25));
+    const width = Math.max(12, Math.floor(window.innerWidth / 20));
     const height = Math.max(8, Math.floor(window.innerHeight / 25));
 
     const rows: Cell[][] = Array.from({length: height}, () => Array.from({length: width}, (): Cell => ({text: letters[Math.floor(Math.random() * letters.length)]})));
@@ -75,7 +75,7 @@ export const LetterGrid404 = () => {
 
     return (
         <>
-            <div ref={containerRef} className='select-none [&>div]:text-center flex flex-col justify-evenly h-svh overflow-hidden' aria-hidden='true'>
+            <div ref={containerRef} className='select-none [&>div]:text-center flex flex-col justify-evenly h-svh overflow-hidden p-5' aria-hidden='true'>
                 {grid.map((row, rowIndex) => (
                     <div key={rowIndex} className='flex justify-between'>
                         {row.map((cell, cellIndex) => {
